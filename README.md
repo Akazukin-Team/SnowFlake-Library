@@ -1,8 +1,9 @@
-# <PLACEHOLDER_NAME>
+# SnowFlake Library
 
-[![Build Status](https://github.com/Akazukin-Team/<PLACEHOLDER_REPO>/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Akazukin-Team/<PLACEHOLDER_REPO>/actions/workflows/build.yml?query=branch:main)
+[![Build Status](https://github.com/Akazukin-Team/SnowFlake-Library/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Akazukin-Team/SnowFlake-Library/actions/workflows/build.yml?query=branch:main)
 
-<PLACEHOLDER_DESCRIPTION>
+A Java library for generating unique IDs using the Snowflake algorithm.
+
 
 ---
 
@@ -22,7 +23,9 @@
 
 ## Features
 
-- <PLACEHOLDER_FEATURES>
+- Efficient ID generation using the Snowflake algorithm
+- Customizable node ID and epoch
+- Thread-safe implementation
 
 ---
 
@@ -53,7 +56,7 @@ Make sure you have the following installed:
     ```xml
     <dependency>
         <groupId>org.akazukin</groupId>
-        <artifactId><PLACEHOLDER_ARTIFACT></artifactId>
+        <artifactId>snowflake</artifactId>
         <version>VERSION</version>
     </dependency>
     ```
@@ -72,7 +75,7 @@ Make sure you have the following installed:
 
 2. Add the dependency to the `dependencies` block in your `build.gradle` file:
     ```groovy
-    implementation 'org.akazukin:<PLACEHOLDER_ARTIFACT>:<VERSION>'
+    implementation 'org.akazukin:snowflake:<VERSION>'
     ```
 
 ---
@@ -82,6 +85,7 @@ Make sure you have the following installed:
 Please read the [Contribution Guide](./.github/CONTRIBUTING.md) carefully and follow the coding conventions and
 guidelines when making your changes.
 
+
 ---
 
 ## Build Instructions
@@ -90,8 +94,8 @@ To build the project from source, follow these steps:
 
 1. Clone the repository:
     ```shell
-    git clone https://github.com/Akazukin-Team/<PLACEHOLDER_REPO>.git
-    cd <PLACEHOLDER_REPO>
+    git clone https://github.com/Akazukin-Team/SnowFlake-Library.git
+    cd SnowFlake-Library
     ```
 
 2. Build the project with Gradle:
@@ -113,11 +117,13 @@ To build the project from source, follow these steps:
 This project uses GitHub Actions for Continuous Integration (CI).
 Every push to the `main` branch automatically triggers the build and test workflow.
 
+
 ---
 
 ## License
 
 This project is licensed under the terms described in the [License](LICENSE) file.
+
 
 ---
 
@@ -125,5 +131,6 @@ This project is licensed under the terms described in the [License](LICENSE) fil
 
 If you need further assistance or wish to contact us directly,
 please refer to the [Support](./.github/SUPPORT.md) page.
+
 
 ---

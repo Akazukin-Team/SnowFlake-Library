@@ -8,6 +8,10 @@ repositories {
         name = 'Jitpack'
         url = 'https://jitpack.io/'
     }
+    maven {
+        name = 'Akazukin Repository'
+        url = 'https://maven.akazukin.org/refer/maven-public/'
+    }
     mavenCentral()
 }
 
