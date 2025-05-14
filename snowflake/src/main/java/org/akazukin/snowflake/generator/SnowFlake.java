@@ -74,6 +74,21 @@ public final class SnowFlake implements ISnowFlake {
      */
     long timestamp, sequence;
 
+    /**
+     * Constructs a new instance of the SnowFlake ID generator, with the specified configuration
+     * and machine ID. The SnowFlake algorithm generates unique, time-ordered IDs by partitioning
+     * a 64-bit number into components that include a timestamp, machine ID, and sequence number.
+     *
+     * @param config    The configuration for the SnowFlake ID generator, specifying machine ID
+     *                  bits, sequence bits, and the start timestamp.
+     * @param machineId The unique identifier for the machine in a distributed system.
+     *                  Must be non-negative and not exceed the maximum value determined by the configured
+     *                  machine ID bits.
+     * @throws IllegalStateException    If the sum of machine ID bits and sequence bits exceeds 22 bits,
+     *                                  or if either machine ID bits or sequence bits are negative.
+     * @throws IllegalArgumentException If the provided machine ID is negative or
+     *                                  exceeds the maximum allowed value.
+     */
     public SnowFlake(@NotNull final ISnowFlakeConfig config, final long machineId) {
         if (config.getMachineIdBits() + config.getSequenceBits() > 22) {
             throw new IllegalStateException(Constants.EX_ILLEGAL_BITS);
