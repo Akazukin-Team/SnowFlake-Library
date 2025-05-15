@@ -6,53 +6,22 @@ import lombok.experimental.FieldDefaults;
 import org.akazukin.annotation.marker.ThreadSafe;
 import org.akazukin.snowflake.Constants;
 import org.akazukin.snowflake.config.ISnowFlakeConfig;
+import org.akazukin.snowflake.config.SnowFlakeConfigUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * The SnowFlake ID is a distributed unique ID generation algorithm that produces 64-bit integers with the following structure:
- * <pre>
- * +---------------------+---------------------+---------------------+
- * |  Timestamp (41 bits)  | Machine ID (VAR bits) |  Sequence (VAR bits)  |
- * +---------------------+---------------------+---------------------+
- * </pre>
- *
- * <h2>Components:</h2>
- * <ul>
- *   <li><b>Timestamp (41 bits):</b> Milliseconds since a custom epoch. Provides ~69 years of unique timestamps.</li>
- *   <li><b>Machine ID (VAR bits):</b> Identifies the ID generator instance.</li>
- *   <li><b>Sequence (VAR bits):</b> Auto-incrementing sequence number for IDs generated in the same millisecond.</li>
- * </ul>
- *
- * <h2>Key Features:</h2>
- * <ul>
- *   <li>Guaranteed uniqueness across distributed systems when properly configured</li>
- *   <li>Time-sortable: IDs are ordered by generation time due to a timestamp component</li>
- *   <li>High performance: Can generate multiple unique IDs within same millisecond</li>
- *   <li>Thread-safe implementation</li>
- *   <li>No central coordination required</li>
- * </ul>
- *
- * <h2>Usage Example:</h2>
- * <pre>
- * ISnowFlakeConfig config = new SnowFlakeConfig();
- * SnowFlake snowflake = new SnowFlake(config, 1L);
- * long id = snowflake.nextId();
- * </pre>
- *
- * <h2>Considerations:</h2>
- * <ul>
- *   <li>Clock synchronization between nodes is important for maintaining proper ordering</li>
- *   <li>Machine IDs must be unique across all nodes to prevent ID collisions</li>
- *   <li>The custom epoch should be chosen carefully based on your application's timeline needs</li>
- *   <li>The maximum timestamp value is limited by 41 bits (~69 years from custom epoch)</li>
- * </ul>
- *
- * @author Currypan1229
- * @see ISnowFlakeConfig for configuration options
- * @since 1.0.0
+ * Represents a SnowFlake ID generator, which creates distributed, globally unique,
+ * and time-ordered 64-bit identifiers by partitioning components such as timestamp,
+ * machine ID, and sequence number.
+ * This implementation adheres to the {@link ISnowFlake} interface and enforces configuration prerequisites.
+ * <p>
+ * The SnowFlake algorithm ensures high performance, low latency, and collision-free
+ * generation of identifiers in distributed systems.
+ * <p>
+ * The implementation is thread-safe and does not require external synchronization.
  */
 @ThreadSafe
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -80,16 +49,24 @@ public final class AtomicSnowFlake implements ISnowFlake {
     @Nullable
     SequencedTimestamp timestamp;
 
+    /**
+     * Constructs a new instance of the SnowFlake ID generator, with the specified configuration
+     * and machine ID. The SnowFlake algorithm generates unique, time-ordered IDs by partitioning
+     * a 64-bit number into components that include a timestamp, machine ID, and sequence number.
+     *
+     * @param config    The configuration for the SnowFlake ID generator, specifying machine ID
+     *                  bits, sequence bits, and the start timestamp.
+     * @param machineId The unique identifier for the machine in a distributed system.
+     *                  Must be non-negative and not exceed the maximum value determined by the configured
+     *                  machine ID bits.
+     * @throws IllegalStateException    If the sum of machine ID bits and sequence bits exceeds 22 bits,
+     *                                  or if either machine ID bits or sequence bits are negative.
+     * @throws IllegalArgumentException If the provided machine ID is negative or
+     *                                  exceeds the maximum allowed value.
+     */
     public AtomicSnowFlake(@NotNull final ISnowFlakeConfig config, final long machineId) {
-        if (config.getMachineIdBits() + config.getSequenceBits() > 22) {
-            throw new IllegalStateException(Constants.EX_ILLEGAL_BITS);
-        }
-        if (config.getMachineIdBits() < 0) {
-            throw new IllegalStateException(Constants.EX_MACHINE_BITS_NEGATIVE);
-        }
-        if (config.getSequenceBits() < 0) {
-            throw new IllegalStateException(Constants.EX_SEQUENCE_BITS_NEGATIVE);
-        }
+        // Validate the configuration
+        SnowFlakeConfigUtils.validate(config);
 
         this.startTimestamp = config.getTimestampStart() + config.getTimestampOffset();
         //  The number of bits each part occupies
