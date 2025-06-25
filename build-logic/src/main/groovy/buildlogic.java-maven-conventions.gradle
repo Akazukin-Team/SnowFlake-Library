@@ -1,6 +1,8 @@
 plugins {
+    id 'buildlogic.java-toolchain-conventions'
+
     id 'maven-publish'
-    id 'java'
+    id 'java-library'
 }
 
 java {
@@ -17,20 +19,22 @@ publishing {
     repositories {
         maven {
             name = 'Releases'
-            url = uri('https://maven.akazukin.org/refer/maven-releases/')
+            url = uri('https://maven.akazukin.org/refer/maven-public-libraries-releases/')
             credentials {
                 username = project.hasProperty('repository.username') ? project['repository.username'] : System.getenv('REPOSITORY_USERNAME')
                 password = project.hasProperty('repository.password') ? project['repository.password'] : System.getenv('REPOSITORY_PASSWORD')
             }
         }
+
         maven {
             name = 'Snapshots'
-            url = uri('https://maven.akazukin.org/refer/maven-snapshots/')
+            url = uri('https://maven.akazukin.org/refer/maven-public-libraries-snapshots/')
             credentials {
                 username = project.hasProperty('repository.username') ? project['repository.username'] : System.getenv('REPOSITORY_USERNAME')
                 password = project.hasProperty('repository.password') ? project['repository.password'] : System.getenv('REPOSITORY_PASSWORD')
             }
         }
+
         mavenLocal()
     }
 
