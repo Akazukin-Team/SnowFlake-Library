@@ -2,7 +2,8 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 plugins {
-    id 'java-library'
+    id 'buildlogic.java-common-conventions'
+    id 'java'
 }
 
 Properties props = new Properties()
@@ -15,13 +16,14 @@ String date = ZonedDateTime.now(ZoneOffset.UTC).getDateTimeString()
 tasks.withType(org.gradle.jvm.tasks.Jar).configureEach {
     manifest {
         attributes 'Build-Jdk-Spec': JavaVersion.current(),
-            'Built-By': props.getProperty('vendor'),
-            'Specification-Title': props.getProperty('name'),
-            'Specification-Version': props.getProperty('version'),
-            'Specification-Vendor': props.getProperty('vendor'),
-            'Implementation-Title': props.getProperty('name'),
-            'Implementation-Version': props.getProperty('version'),
-            'Implementation-Vendor': props.getProperty('vendor'),
-            'Implementation-Build-Date': date
+                'Built-By': props.getProperty('vendor'),
+                'Specification-Title': props.getProperty('name'),
+                'Specification-Version': props.getProperty('version'),
+                'Specification-Vendor': props.getProperty('vendor'),
+                'Implementation-Title': props.getProperty('name'),
+                'Implementation-Version': props.getProperty('version'),
+                'Implementation-Vendor': props.getProperty('vendor'),
+                'Implementation-Build-Date': date,
+                'Multi-Release': true
     }
 }
