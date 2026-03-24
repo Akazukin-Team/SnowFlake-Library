@@ -76,6 +76,8 @@ public class SnowFlakeTest {
                 throw e.getCause();
             }
         }
+
+        Assertions.assertEquals(gens * threads, ids.size());
     }
 
     @Test
