@@ -10,8 +10,6 @@ import org.akazukin.snowflake.config.SnowFlakeConfigUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.concurrent.atomic.AtomicLong;
-
 /**
  * Represents a SnowFlake ID generator, which creates distributed, globally unique,
  * and time-ordered 64-bit identifiers by partitioning components such as timestamp,
@@ -98,14 +96,11 @@ public final class AtomicSnowFlake implements ISnowFlake {
         synchronized (this) {
             if (this.timestamp == null || this.timestamp.timestamp < curTime) {
                 this.timestamp = new SequencedTimestamp(curTime);
-                seq = this.timestamp.sequenceAtomic.get();
-            } else if (this.timestamp.sequenceAtomic.get() < this.maxSequenceNum) {
-                seq = this.timestamp.sequenceAtomic.incrementAndGet();
-            } else {
+            } else if (this.timestamp.sequence == this.maxSequenceNum) {
                 this.timestamp = new SequencedTimestamp(this.timestamp.timestamp + 1L);
-                seq = this.timestamp.sequenceAtomic.get();
             }
             ts = this.timestamp.timestamp;
+            seq = this.timestamp.getAndIncreaseSequence();
         }
 
 
@@ -115,9 +110,13 @@ public final class AtomicSnowFlake implements ISnowFlake {
     }
 
     @RequiredArgsConstructor
-    @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
+    @FieldDefaults(level = AccessLevel.PRIVATE)
     private static final class SequencedTimestamp {
-        long timestamp;
-        AtomicLong sequenceAtomic = new AtomicLong();
+        final long timestamp;
+        long sequence;
+
+        public long getAndIncreaseSequence() {
+            return this.sequence++;
+        }
     }
 }
