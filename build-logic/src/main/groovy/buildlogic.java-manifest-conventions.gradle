@@ -2,7 +2,8 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 plugins {
-    id 'buildlogic.java-common-conventions'
+    id 'buildlogic.java-toolchain-conventions'
+
     id 'java'
 }
 

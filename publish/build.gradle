@@ -1,0 +1,13 @@
+plugins {
+    id 'buildlogic.java-publish-conventions'
+}
+
+jar {
+    dependsOn(':snowflake:api:jar')
+    dependsOn(':snowflake:impl:jar')
+}
+
+dependencies {
+    libFatjar project(':snowflake:api')
+    libFatjar project(':snowflake:impl')
+}

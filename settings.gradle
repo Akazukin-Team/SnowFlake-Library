@@ -7,4 +7,9 @@ plugins {
 }
 
 rootProject.name = 'SnowFlake Library'
-include('snowflake')
+include(
+        ':snowflake:api',
+        ':snowflake:impl'
+)
+
+include(':publish')

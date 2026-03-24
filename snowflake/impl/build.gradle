@@ -1,0 +1,14 @@
+plugins {
+    id 'buildlogic.java-module-conventions'
+    id 'buildlogic.java-jmh-conventions'
+}
+
+dependencies {
+    compileOnly project(":snowflake:api")
+
+    unitTestImplementation project(":snowflake:api")
+
+    jmhImplementation project(":snowflake:api")
+
+    compileOnly libs.akz.annotation.marker
+}
