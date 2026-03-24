@@ -17,8 +17,8 @@ import java.util.concurrent.TimeUnit;
 public class SnowFlakeTest {
     @Test
     void test() throws Throwable {
-        final byte threads = 3;
-        final int gens = 1_000;
+        final byte threads = 6;
+        final int gens = 10_000;
 
 
         final ISnowFlakeConfig cfg = new ISnowFlakeConfig() {
@@ -63,7 +63,7 @@ public class SnowFlakeTest {
             }));
         }
         executor.shutdown();
-        if (!executor.awaitTermination(Long.MAX_VALUE, TimeUnit.DAYS)) {
+        if (!executor.awaitTermination(1, TimeUnit.MINUTES)) {
             executor.shutdownNow();
         }
 
