@@ -1,0 +1,5 @@
+id: common-repo
+name: CommonRepo
+version: 1.0.0
+description: A common plugin for repository management.
+main-class: org.akazukin.plugin.repo.common.CommonRepoPlugin

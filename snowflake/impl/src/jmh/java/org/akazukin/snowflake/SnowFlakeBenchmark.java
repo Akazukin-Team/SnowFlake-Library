@@ -40,10 +40,10 @@ public class SnowFlakeBenchmark {
         this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(POOL_SIZE);
         this.tasks = new ArrayList<>();
 
-        final ISnowFlake ISnowFlake = new AtomicSnowFlake(new SnowFlakeConfig(), 0b111 << 7 | 0b1);
+        final ISnowFlake gen = new AtomicSnowFlake(new SnowFlakeConfig(), 0b111 << 7 | 0b1);
         final Callable<Void> task = () -> {
             for (int i2 = 0; i2 < SIZE; i2++) {
-                ISnowFlake.nextId();
+                gen.nextId();
             }
             return null;
         };

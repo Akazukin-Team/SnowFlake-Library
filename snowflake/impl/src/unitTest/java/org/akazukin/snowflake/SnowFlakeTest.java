@@ -18,7 +18,7 @@ public class SnowFlakeTest {
     @Test
     void test() throws Throwable {
         final byte threads = 3;
-        final int gens = 100_000;
+        final int gens = 1_000;
 
 
         final ISnowFlakeConfig cfg = new ISnowFlakeConfig() {

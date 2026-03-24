@@ -20,7 +20,6 @@ repositories {
             includeGroup 'org.akazukin'
         }
     }
-    mavenLocal()
 
     mavenCentral()
 }
