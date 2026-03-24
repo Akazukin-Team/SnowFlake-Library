@@ -1,14 +1,12 @@
 package org.akazukin.snowflake.generator;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.annotation.marker.ThreadSafe;
 import org.akazukin.snowflake.Constants;
 import org.akazukin.snowflake.config.ISnowFlakeConfig;
 import org.akazukin.snowflake.config.SnowFlakeConfigUtils;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents a SnowFlake ID generator, which creates distributed, globally unique,
@@ -44,8 +42,8 @@ public final class AtomicSnowFlake implements ISnowFlake {
     /**
      * Current timestamp
      */
-    @Nullable
-    SequencedTimestamp timestamp;
+    long timestamp;
+    long sequence;
 
     /**
      * Constructs a new instance of the SnowFlake ID generator, with the specified configuration
@@ -94,29 +92,17 @@ public final class AtomicSnowFlake implements ISnowFlake {
 
         final long ts, seq;
         synchronized (this) {
-            if (this.timestamp == null || this.timestamp.timestamp < curTime) {
-                this.timestamp = new SequencedTimestamp(curTime);
-            } else if (this.timestamp.sequence == this.maxSequenceNum) {
-                this.timestamp = new SequencedTimestamp(this.timestamp.timestamp + 1L);
+            if (this.timestamp < curTime) {
+                this.timestamp = curTime;
+            } else if (this.sequence == this.maxSequenceNum) {
+                this.timestamp++;
             }
-            ts = this.timestamp.timestamp;
-            seq = this.timestamp.getAndIncreaseSequence();
+            ts = this.timestamp;
+            seq = this.sequence++;
         }
-
 
         return (ts - this.startTimestamp) << this.timestampLeft
                 | this.machineId << this.machineLeft
                 | seq;
-    }
-
-    @RequiredArgsConstructor
-    @FieldDefaults(level = AccessLevel.PRIVATE)
-    private static final class SequencedTimestamp {
-        final long timestamp;
-        long sequence;
-
-        public long getAndIncreaseSequence() {
-            return this.sequence++;
-        }
     }
 }
