@@ -12,9 +12,6 @@ public class Constants {
     /**
      * Exception messages
      */
-    public static final String EX_ILLEGAL_BITS = "The sum of machineId bits and sequence greater than 22 bits";
-    public static final String EX_MACHINE_BITS_NEGATIVE = "The machineId bits must be positive";
-    public static final String EX_SEQUENCE_BITS_NEGATIVE = "The sequence bits must be positive";
     public static final String EX_ILLEGAL_MACHINE_NUM_BIGGER = "machineId can't be greater than max machine id";
     public static final String EX_ILLEGAL_MACHINE_NUM_NEGATIVE = "machineId must not be negative";
 }

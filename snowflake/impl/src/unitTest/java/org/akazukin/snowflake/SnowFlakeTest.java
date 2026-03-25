@@ -1,6 +1,7 @@
 package org.akazukin.snowflake;
 
 import org.akazukin.snowflake.config.ISnowFlakeConfig;
+import org.akazukin.snowflake.config.SnowFlakeConfigUtils;
 import org.akazukin.snowflake.generator.AtomicSnowFlake;
 import org.akazukin.snowflake.generator.ISnowFlake;
 import org.junit.jupiter.api.Assertions;
@@ -106,7 +107,7 @@ public class SnowFlakeTest {
             }, 0L);
         });
 
-        Assertions.assertEquals(Constants.EX_ILLEGAL_BITS, ex.getMessage());
+        Assertions.assertEquals(SnowFlakeConfigUtils.EX_ILLEGAL_BITS, ex.getMessage());
     }
 
     @Test
@@ -135,7 +136,7 @@ public class SnowFlakeTest {
             }, 0L);
         });
 
-        Assertions.assertEquals(Constants.EX_MACHINE_BITS_NEGATIVE, ex.getMessage());
+        Assertions.assertEquals(SnowFlakeConfigUtils.EX_MACHINE_BITS_NEGATIVE, ex.getMessage());
     }
 
     @Test
@@ -164,7 +165,7 @@ public class SnowFlakeTest {
             }, 0L);
         });
 
-        Assertions.assertEquals(Constants.EX_SEQUENCE_BITS_NEGATIVE, ex.getMessage());
+        Assertions.assertEquals(SnowFlakeConfigUtils.EX_SEQUENCE_BITS_NEGATIVE, ex.getMessage());
     }
 
     @Test
