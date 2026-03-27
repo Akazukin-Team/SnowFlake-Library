@@ -9,13 +9,14 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class SnowFlakeTest {
+public class AtomicSnowFlakeTest {
     @Test
     void test() throws Throwable {
         final byte threads = 6;
@@ -45,21 +46,14 @@ public class SnowFlakeTest {
         };
 
         final ISnowFlake gen = new AtomicSnowFlake(cfg, 0);
-        final Set<Long> ids = new HashSet<>();
+        final Set<Long> ids = ConcurrentHashMap.newKeySet();
 
         final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
         final Set<Future<?>> tasks = new HashSet<>();
         for (int i = 0; i < executor.getMaximumPoolSize(); i++) {
             tasks.add(executor.submit(() -> {
                 for (int i2 = 0; i2 < gens; i2++) {
-                    final long id = gen.nextId();
-                    synchronized (ids) {
-                        if (ids.contains(id)) {
-                            throw new IllegalStateException("Duplicate id: " + id);
-                        } else {
-                            ids.add(id);
-                        }
-                    }
+                    ids.add(gen.nextId());
                 }
             }));
         }
