@@ -93,12 +93,15 @@ public final class AtomicSnowFlake implements ISnowFlake {
         final long ts, seq;
         synchronized (this) {
             if (this.timestamp < curTime) {
-                this.timestamp = curTime;
+                ts = this.timestamp = curTime;
+                seq = this.sequence = 0;
             } else if (this.sequence == this.maxSequenceNum) {
-                this.timestamp++;
+                ts = ++this.timestamp;
+                seq = this.sequence = 0;
+            } else {
+                ts = this.timestamp;
+                seq = ++this.sequence;
             }
-            ts = this.timestamp;
-            seq = this.sequence++;
         }
 
         return (ts - this.startTimestamp) << this.timestampLeft
