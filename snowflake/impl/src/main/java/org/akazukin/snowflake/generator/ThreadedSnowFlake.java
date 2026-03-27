@@ -2,18 +2,44 @@ package org.akazukin.snowflake.generator;
 
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
+import org.akazukin.annotation.marker.ThreadSafe;
 import org.akazukin.snowflake.config.ISnowFlakeConfig;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+/**
+ * Pool-based implementation that delegates generation to a pool of
+ * internal generator instances.
+ *
+ * <p>Uses multiple internal generator instances (one per pool entry) to
+ * produce identifiers and reduce contention under concurrent use.
+ */
+@ThreadSafe
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class ThreadedSnowFlake implements ISnowFlake {
+    /**
+     * Pool of internal generator instances used to produce identifiers.
+     */
     SnowFlakeContainer[] pool;
+
+    /**
+     * Number of entries in the pool.
+     */
     int poolSize;
 
+    /**
+     * Per-thread starting index into the pool.
+     */
     ThreadLocal<Integer> threadIdx;
 
+    /**
+     * Constructs a new {@code ThreadedSnowFlake} with the provided configuration.
+     *
+     * @param config    configuration for each pooled instance (must not be null)
+     * @param machineId base machine identifier for the first pooled instance
+     * @param poolSize  number of pooled instances (positive)
+     */
     public ThreadedSnowFlake(final ISnowFlakeConfig config, final long machineId, final int poolSize) {
         this.poolSize = poolSize;
         this.pool = new SnowFlakeContainer[poolSize];
@@ -23,6 +49,11 @@ public class ThreadedSnowFlake implements ISnowFlake {
         this.threadIdx = ThreadLocal.withInitial(() -> ThreadLocalRandom.current().nextInt(poolSize));
     }
 
+    /**
+     * Returns the next 64-bit identifier by delegating to a pooled generator.
+     *
+     * @return next 64-bit identifier as produced by a pooled generator
+     */
     @Override
     public long nextId() {
         int i = this.threadIdx.get();
@@ -41,6 +72,9 @@ public class ThreadedSnowFlake implements ISnowFlake {
         }
     }
 
+    /**
+     * Pool entry that holds a pooled {@code SnowFlake} and a lock.
+     */
     private static class SnowFlakeContainer {
         final SnowFlake instance;
         final AtomicBoolean lock = new AtomicBoolean(false);

@@ -9,56 +9,47 @@ import org.akazukin.snowflake.config.SnowFlakeConfigUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Represents a SnowFlake ID generator, which creates distributed, globally unique,
- * and time-ordered 64-bit identifiers by partitioning components such as timestamp,
- * machine ID, and sequence number.
- * This implementation adheres to the {@link ISnowFlake} interface and enforces configuration prerequisites.
- * <p>
- * The SnowFlake algorithm ensures high performance, low latency, and collision-free
- * generation of identifiers in distributed systems.
- * <p>
- * The implementation is non-thread-safe, meaning that it is not designed to be used
- * in a multithreaded environment without external synchronization mechanisms.
+ * Simple, non-thread-safe generator implementation for producing identifiers.
+ *
+ * <p>Minimal implementation intended for single-threaded use.
+ * Validates configuration on construction and composes identifiers according
+ * to the configured bit layout.
  */
 @NonThreadSafe
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public final class SnowFlake implements ISnowFlake {
     /**
-     * The number of max sequences
+     * Maximum sequence value.
      */
     final long maxSequenceNum;
 
     /**
-     * The number of bits each part to shift
+     * Bit shift amounts used to pack machine ID and timestamp.
      */
     final long machineLeft;
     final long timestampLeft;
 
     /**
-     * Timestamp start time
+     * Configured start timestamp.
      */
     final long startTimestamp;
     final long machineId;
 
     /**
-     * Current timestamp
+     * Current timestamp and sequence counter.
      */
     long timestamp, sequence;
 
     /**
-     * Constructs a new instance of the SnowFlake ID generator, with the specified configuration
-     * and machine ID. The SnowFlake algorithm generates unique, time-ordered IDs by partitioning
-     * a 64-bit number into components that include a timestamp, machine ID, and sequence number.
+     * Constructs a new {@code SnowFlake} and validates the provided configuration.
+     * Initializes bit shifts and local machine identifier.
      *
-     * @param config    The configuration for the SnowFlake ID generator, specifying machine ID
-     *                  bits, sequence bits, and the start timestamp.
-     * @param machineId The unique identifier for the machine in a distributed system.
-     *                  Must be non-negative and not exceed the maximum value determined by the configured
-     *                  machine ID bits.
-     * @throws IllegalStateException    If the sum of machine ID bits and sequence bits exceeds 22 bits,
-     *                                  or if either machine ID bits or sequence bits are negative.
-     * @throws IllegalArgumentException If the provided machine ID is negative or
-     *                                  exceeds the maximum allowed value.
+     * @param config    configuration specifying machine and sequence bits
+     *                  and the start timestamp (must not be null)
+     * @param machineId machine identifier for this instance (non-negative,
+     *                  must not exceed the maximum allowed by machine ID bits)
+     * @throws IllegalStateException    if configuration bit sizes are invalid
+     * @throws IllegalArgumentException if {@code machineId} is out of range
      */
     public SnowFlake(@NotNull final ISnowFlakeConfig config, final long machineId) {
         // Validate the configuration
@@ -86,6 +77,11 @@ public final class SnowFlake implements ISnowFlake {
         this.machineId = machineId;
     }
 
+    /**
+     * Returns the next identifier.
+     *
+     * @return next 64-bit identifier
+     */
     @Override
     public long nextId() {
         final long curTime = System.currentTimeMillis();
@@ -98,7 +94,6 @@ public final class SnowFlake implements ISnowFlake {
             this.timestamp++;
             this.sequence = 0;
         }
-
 
         return (this.timestamp - this.startTimestamp) << this.timestampLeft
                 | this.machineId << this.machineLeft
