@@ -1,25 +1,21 @@
 package org.akazukin.snowflake.generator;
 
 /**
- * ISnowFlake provides an interface for generating unique 64-bit identifiers
- * using a SnowFlake algorithm. The generated IDs are time-ordered and consist
- * of components like timestamp, machine ID, and sequence number.
+ * API for producing 64-bit identifiers.
  * <p>
- * Core Features:
- * - Ensures uniqueness across distributed systems when configured correctly.
- * - Produces time-ordered identifiers for chronological sorting.
- * - Supports high performance, allowing multiple IDs to be generated within the same millisecond.
+ * Represents a SnowFlake ID generator, which creates distributed, globally unique,
+ * and time-ordered 64-bit identifiers by partitioning components such as timestamp,
+ * machine ID, and sequence number.
+ * This implementation adheres to the {@link ISnowFlake} interface and enforces configuration prerequisites.
  * <p>
- * Implementations of this interface must adhere to SnowFlake's design principles,
- * ensuring proper bit allocation and collision-free identifier generation.
+ * The SnowFlake algorithm ensures high performance, low latency, and collision-free
+ * generation of identifiers in distributed systems.
  */
 public interface ISnowFlake {
     /**
-     * Generates the next unique identifier using the SnowFlake algorithm.
-     * The identifier is a 64-bit number comprising timestamp, machine ID, and sequence components.
+     * Returns the next 64-bit identifier.
      *
-     * @return a globally unique 64-bit ID that is time-ordered and collision-free
-     * within a distributed system, assuming proper configuration.
+     * @return next 64-bit identifier
      */
     long nextId();
 }
