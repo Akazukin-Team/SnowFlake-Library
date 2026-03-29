@@ -9,7 +9,7 @@ package org.akazukin.snowflake.config;
  * values required for SnowFlake ID generation. These configurations directly influence
  * the structure and limits of the generated IDs.
  */
-public interface ISnowFlakeConfig {
+public interface ISnowflakeConfig {
     /**
      * Retrieves the custom epoch start timestamp for the SnowFlake ID generation.
      * This timestamp represents the starting reference point for the

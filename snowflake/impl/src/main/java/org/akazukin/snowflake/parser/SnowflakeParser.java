@@ -3,19 +3,19 @@ package org.akazukin.snowflake.parser;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.akazukin.snowflake.config.ISnowFlakeConfig;
-import org.akazukin.snowflake.config.SnowFlakeConfigUtils;
+import org.akazukin.snowflake.config.ISnowflakeConfig;
+import org.akazukin.snowflake.config.SnowflakeConfigUtils;
 
 /**
  * This class is responsible for parsing Snowflake IDs into their constituent parts.
  * It uses a configuration-based approach to define the structure of a Snowflake ID.
  * The parsed components typically include the machine ID, sequence number, and timestamp.
  *
- * @see ISnowFlakeConfig
- * @see SnowFlakeConfigUtils#validate(ISnowFlakeConfig)
+ * @see ISnowflakeConfig
+ * @see SnowflakeConfigUtils#validate(ISnowflakeConfig)
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SnowFlakeParser {
+public class SnowflakeParser {
     /**
      * The number of bits each part to shift
      */
@@ -32,9 +32,9 @@ public class SnowFlakeParser {
      * @throws IllegalArgumentException If the provided machine ID is negative or
      *                                  exceeds the maximum allowed value.
      */
-    public SnowFlakeParser(final ISnowFlakeConfig cfg) {
+    public SnowflakeParser(final ISnowflakeConfig cfg) {
         // Validate the configuration
-        SnowFlakeConfigUtils.validate(cfg);
+        SnowflakeConfigUtils.validate(cfg);
 
         this.machineLeft = cfg.getSequenceBits();
         this.timestampLeft = this.machineLeft + cfg.getMachineIdBits();
@@ -58,7 +58,7 @@ public class SnowFlakeParser {
      * Represents the result of parsing a Snowflake ID.
      * This class encapsulates the machine ID, sequence, and timestamp components extracted from a Snowflake identifier.
      *
-     * @see SnowFlakeParser#parse(long)
+     * @see SnowflakeParser#parse(long)
      */
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @AllArgsConstructor

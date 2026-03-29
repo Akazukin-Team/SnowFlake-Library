@@ -3,7 +3,7 @@ package org.akazukin.snowflake.generator;
 import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.annotation.marker.ThreadSafe;
-import org.akazukin.snowflake.config.ISnowFlakeConfig;
+import org.akazukin.snowflake.config.ISnowflakeConfig;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @ThreadSafe
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ThreadedSnowFlake implements ISnowFlake {
+public class ThreadedSnowflake implements ISnowflake {
     /**
      * Pool of internal generator instances used to produce identifiers.
      */
@@ -40,11 +40,11 @@ public class ThreadedSnowFlake implements ISnowFlake {
      * @param machineId base machine identifier for the first pooled instance
      * @param poolSize  number of pooled instances (positive)
      */
-    public ThreadedSnowFlake(final ISnowFlakeConfig config, final long machineId, final int poolSize) {
+    public ThreadedSnowflake(final ISnowflakeConfig config, final long machineId, final int poolSize) {
         this.poolSize = poolSize;
         this.pool = new SnowFlakeContainer[poolSize];
         for (int i = 0; i < poolSize; i++) {
-            this.pool[i] = new SnowFlakeContainer(new SnowFlake(config, machineId + i));
+            this.pool[i] = new SnowFlakeContainer(new Snowflake(config, machineId + i));
         }
         this.threadIdx = ThreadLocal.withInitial(() -> ThreadLocalRandom.current().nextInt(poolSize));
     }
@@ -76,10 +76,10 @@ public class ThreadedSnowFlake implements ISnowFlake {
      * Pool entry that holds a pooled {@code SnowFlake} and a lock.
      */
     private static class SnowFlakeContainer {
-        final SnowFlake instance;
+        final Snowflake instance;
         final AtomicBoolean lock = new AtomicBoolean(false);
 
-        SnowFlakeContainer(final SnowFlake instance) {
+        SnowFlakeContainer(final Snowflake instance) {
             this.instance = instance;
         }
     }

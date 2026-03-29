@@ -13,7 +13,7 @@
  * <p>
  * Key interfaces:
  * <ul>
- *   <li>{@link org.akazukin.snowflake.config.ISnowFlakeConfig} - Defines the configurable parameters for SnowFlake ID generation.</li>
+ *   <li>{@link org.akazukin.snowflake.config.ISnowflakeConfig} - Defines the configurable parameters for SnowFlake ID generation.</li>
  * </ul>
  * <p>
  * This package is designed to provide flexibility and scalability for systems requiring

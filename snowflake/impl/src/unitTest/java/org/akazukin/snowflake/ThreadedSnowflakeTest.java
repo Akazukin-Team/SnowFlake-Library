@@ -1,9 +1,9 @@
 package org.akazukin.snowflake;
 
-import org.akazukin.snowflake.config.ISnowFlakeConfig;
-import org.akazukin.snowflake.config.SnowFlakeConfigUtils;
-import org.akazukin.snowflake.generator.AtomicSnowFlake;
-import org.akazukin.snowflake.generator.ISnowFlake;
+import org.akazukin.snowflake.config.ISnowflakeConfig;
+import org.akazukin.snowflake.config.SnowflakeConfigUtils;
+import org.akazukin.snowflake.generator.ISnowflake;
+import org.akazukin.snowflake.generator.ThreadedSnowflake;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -16,14 +16,15 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class AtomicSnowFlakeTest {
+public class ThreadedSnowflakeTest {
     @Test
     void test() throws Throwable {
         final byte threads = 6;
+        final byte genThrads = 4;
         final int gens = 10_000;
 
 
-        final ISnowFlakeConfig cfg = new ISnowFlakeConfig() {
+        final ISnowflakeConfig cfg = new ISnowflakeConfig() {
             @Override
             public long getTimestampStart() {
                 return 0;
@@ -36,16 +37,16 @@ public class AtomicSnowFlakeTest {
 
             @Override
             public byte getMachineIdBits() {
-                return 0;
+                return 2;
             }
 
             @Override
             public byte getSequenceBits() {
-                return (byte) 22;
+                return (byte) 20;
             }
         };
 
-        final ISnowFlake gen = new AtomicSnowFlake(cfg, 0);
+        final ISnowflake gen = new ThreadedSnowflake(cfg, 0, genThrads);
         final Set<Long> ids = ConcurrentHashMap.newKeySet();
 
         final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
@@ -78,7 +79,7 @@ public class AtomicSnowFlakeTest {
     @Test
     void testTooManyBits() {
         final IllegalStateException ex = Assertions.assertThrows(IllegalStateException.class, () -> {
-            new AtomicSnowFlake(new ISnowFlakeConfig() {
+            new ThreadedSnowflake(new ISnowflakeConfig() {
                 @Override
                 public long getTimestampStart() {
                     return 0;
@@ -98,16 +99,16 @@ public class AtomicSnowFlakeTest {
                 public byte getSequenceBits() {
                     return 13;
                 }
-            }, 0L);
+            }, 0L, 1);
         });
 
-        Assertions.assertEquals(SnowFlakeConfigUtils.EX_ILLEGAL_BITS, ex.getMessage());
+        Assertions.assertEquals(SnowflakeConfigUtils.EX_ILLEGAL_BITS, ex.getMessage());
     }
 
     @Test
     void testNegativeMachineIdBits() {
         final IllegalStateException ex = Assertions.assertThrows(IllegalStateException.class, () -> {
-            new AtomicSnowFlake(new ISnowFlakeConfig() {
+            new ThreadedSnowflake(new ISnowflakeConfig() {
                 @Override
                 public long getTimestampStart() {
                     return 0;
@@ -127,16 +128,16 @@ public class AtomicSnowFlakeTest {
                 public byte getSequenceBits() {
                     return 0;
                 }
-            }, 0L);
+            }, 0L, 1);
         });
 
-        Assertions.assertEquals(SnowFlakeConfigUtils.EX_MACHINE_BITS_NEGATIVE, ex.getMessage());
+        Assertions.assertEquals(SnowflakeConfigUtils.EX_MACHINE_BITS_NEGATIVE, ex.getMessage());
     }
 
     @Test
     void testNegativeSequenceBits() {
         final IllegalStateException ex = Assertions.assertThrows(IllegalStateException.class, () -> {
-            new AtomicSnowFlake(new ISnowFlakeConfig() {
+            new ThreadedSnowflake(new ISnowflakeConfig() {
                 @Override
                 public long getTimestampStart() {
                     return 0;
@@ -156,16 +157,16 @@ public class AtomicSnowFlakeTest {
                 public byte getSequenceBits() {
                     return -1;
                 }
-            }, 0L);
+            }, 0L, 1);
         });
 
-        Assertions.assertEquals(SnowFlakeConfigUtils.EX_SEQUENCE_BITS_NEGATIVE, ex.getMessage());
+        Assertions.assertEquals(SnowflakeConfigUtils.EX_SEQUENCE_BITS_NEGATIVE, ex.getMessage());
     }
 
     @Test
     void testMachineIdNegative() {
         final IllegalArgumentException ex = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new AtomicSnowFlake(new ISnowFlakeConfig() {
+            new ThreadedSnowflake(new ISnowflakeConfig() {
                 @Override
                 public long getTimestampStart() {
                     return 0;
@@ -185,7 +186,7 @@ public class AtomicSnowFlakeTest {
                 public byte getSequenceBits() {
                     return 0;
                 }
-            }, -1L);
+            }, -1L, 1);
         });
 
         Assertions.assertEquals(Constants.EX_ILLEGAL_MACHINE_NUM_NEGATIVE, ex.getMessage());
@@ -194,7 +195,7 @@ public class AtomicSnowFlakeTest {
     @Test
     void testMachineIdTooBig() {
         final IllegalArgumentException ex = Assertions.assertThrows(IllegalArgumentException.class, () -> {
-            new AtomicSnowFlake(new ISnowFlakeConfig() {
+            new ThreadedSnowflake(new ISnowflakeConfig() {
                 @Override
                 public long getTimestampStart() {
                     return 0;
@@ -214,7 +215,7 @@ public class AtomicSnowFlakeTest {
                 public byte getSequenceBits() {
                     return 0;
                 }
-            }, 2L);
+            }, 2L, 1);
         });
 
         Assertions.assertEquals(Constants.EX_ILLEGAL_MACHINE_NUM_BIGGER, ex.getMessage());

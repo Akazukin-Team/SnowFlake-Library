@@ -6,12 +6,12 @@ package org.akazukin.snowflake.generator;
  * Represents a SnowFlake ID generator, which creates distributed, globally unique,
  * and time-ordered 64-bit identifiers by partitioning components such as timestamp,
  * machine ID, and sequence number.
- * This implementation adheres to the {@link ISnowFlake} interface and enforces configuration prerequisites.
+ * This implementation adheres to the {@link ISnowflake} interface and enforces configuration prerequisites.
  * <p>
  * The SnowFlake algorithm ensures high performance, low latency, and collision-free
  * generation of identifiers in distributed systems.
  */
-public interface ISnowFlake {
+public interface ISnowflake {
     /**
      * Returns the next 64-bit identifier.
      *

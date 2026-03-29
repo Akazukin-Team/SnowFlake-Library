@@ -1,7 +1,7 @@
 package org.akazukin.snowflake;
 
-import org.akazukin.snowflake.generator.AtomicSnowFlake;
-import org.akazukin.snowflake.generator.ISnowFlake;
+import org.akazukin.snowflake.generator.AtomicSnowflake;
+import org.akazukin.snowflake.generator.ISnowflake;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.CompilerControl;
@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Thread)
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @CompilerControl(CompilerControl.Mode.DONT_INLINE)
-public class AtomicSnowFlakeBenchmark {
+public class AtomicSnowflakeBenchmark {
     public static final int POOL_SIZE = 75;
     private static final int SIZE = 1 << 21;
     private List<Callable<Void>> tasks;
@@ -40,7 +40,7 @@ public class AtomicSnowFlakeBenchmark {
         this.executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(POOL_SIZE);
         this.tasks = new ArrayList<>();
 
-        final ISnowFlake gen = new AtomicSnowFlake(new SnowFlakeConfig(), 0b111 << 7 | 0b1);
+        final ISnowflake gen = new AtomicSnowflake(new SnowflakeConfig(), 0b111 << 7 | 0b1);
         final Callable<Void> task = () -> {
             for (int i2 = 0; i2 < SIZE; i2++) {
                 gen.nextId();

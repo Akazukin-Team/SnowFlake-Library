@@ -1,8 +1,8 @@
 package org.akazukin.snowflake;
 
-import org.akazukin.snowflake.config.ISnowFlakeConfig;
+import org.akazukin.snowflake.config.ISnowflakeConfig;
 
-public final class SnowFlakeConfig implements ISnowFlakeConfig {
+public final class SnowflakeConfig implements ISnowflakeConfig {
     @Override
     public long getTimestampStart() {
         return 1735689600000L; // 2025-01-01T00:00:00.000Z
