@@ -4,7 +4,7 @@ import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 @UtilityClass
-public class SnowFlakeConfigUtils {
+public class SnowflakeConfigUtils {
     public static final String EX_ILLEGAL_BITS = "The sum of machineId bits and sequence greater than 22 bits";
     public static final String EX_MACHINE_BITS_NEGATIVE = "The machineId bits must be positive";
     public static final String EX_SEQUENCE_BITS_NEGATIVE = "The sequence bits must be positive";
@@ -18,7 +18,7 @@ public class SnowFlakeConfigUtils {
      * @throws IllegalArgumentException If the provided machine ID is negative or
      *                                  exceeds the maximum allowed value.
      */
-    public void validate(@NotNull final ISnowFlakeConfig cfg) {
+    public void validate(@NotNull final ISnowflakeConfig cfg) {
         if (cfg.getMachineIdBits() + cfg.getSequenceBits() > 22) {
             throw new IllegalStateException(EX_ILLEGAL_BITS);
         }

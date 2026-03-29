@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.annotation.marker.NonThreadSafe;
 import org.akazukin.snowflake.Constants;
-import org.akazukin.snowflake.config.ISnowFlakeConfig;
-import org.akazukin.snowflake.config.SnowFlakeConfigUtils;
+import org.akazukin.snowflake.config.ISnowflakeConfig;
+import org.akazukin.snowflake.config.SnowflakeConfigUtils;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  */
 @NonThreadSafe
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public final class SnowFlake implements ISnowFlake {
+public final class Snowflake implements ISnowflake {
     /**
      * Maximum sequence value.
      */
@@ -51,9 +51,9 @@ public final class SnowFlake implements ISnowFlake {
      * @throws IllegalStateException    if configuration bit sizes are invalid
      * @throws IllegalArgumentException if {@code machineId} is out of range
      */
-    public SnowFlake(@NotNull final ISnowFlakeConfig config, final long machineId) {
+    public Snowflake(@NotNull final ISnowflakeConfig config, final long machineId) {
         // Validate the configuration
-        SnowFlakeConfigUtils.validate(config);
+        SnowflakeConfigUtils.validate(config);
 
         this.startTimestamp = config.getTimestampStart();
         //  The number of bits each part occupies
