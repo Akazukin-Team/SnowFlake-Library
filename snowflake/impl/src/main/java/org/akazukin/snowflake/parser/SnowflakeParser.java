@@ -2,6 +2,7 @@ package org.akazukin.snowflake.parser;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.experimental.FieldDefaults;
 import org.akazukin.snowflake.config.ISnowflakeConfig;
 import org.akazukin.snowflake.config.SnowflakeConfigUtils;
@@ -62,6 +63,7 @@ public class SnowflakeParser {
      */
     @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
     @AllArgsConstructor
+    @Getter
     public static class Result {
         long machineId;
         long sequence;
