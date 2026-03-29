@@ -8,7 +8,7 @@ package org.akazukin.snowflake;
  * These messages pertain to configuration and validation issues encountered
  * during the initialization or usage of SnowFlake instances.
  */
-public class Constants {
+public final class Constants {
     /**
      * Exception messages
      */
