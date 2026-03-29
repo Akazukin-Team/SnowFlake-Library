@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 @ThreadSafe
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ThreadedSnowflake implements ISnowflake {
+public final class ThreadedSnowflake implements ISnowflake {
     /**
      * Pool of internal generator instances used to produce identifiers.
      */

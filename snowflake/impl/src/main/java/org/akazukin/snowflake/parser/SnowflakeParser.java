@@ -16,7 +16,7 @@ import org.akazukin.snowflake.config.SnowflakeConfigUtils;
  * @see SnowflakeConfigUtils#validate(ISnowflakeConfig)
  */
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class SnowflakeParser {
+public final class SnowflakeParser {
     /**
      * The number of bits each part to shift
      */

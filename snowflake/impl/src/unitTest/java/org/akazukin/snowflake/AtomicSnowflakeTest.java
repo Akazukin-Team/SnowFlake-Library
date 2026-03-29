@@ -16,7 +16,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class AtomicSnowflakeTest {
+public final class AtomicSnowflakeTest {
     @Test
     void test() throws Throwable {
         final byte threads = 6;
