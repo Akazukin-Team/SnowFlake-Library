@@ -50,12 +50,13 @@ public final class AtomicSnowflakeTest {
 
         final ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(threads);
         final Set<Future<?>> tasks = new HashSet<>();
+        final Runnable task = () -> {
+            for (int i2 = 0; i2 < gens; i2++) {
+                ids.add(gen.nextId());
+            }
+        };
         for (int i = 0; i < executor.getMaximumPoolSize(); i++) {
-            tasks.add(executor.submit(() -> {
-                for (int i2 = 0; i2 < gens; i2++) {
-                    ids.add(gen.nextId());
-                }
-            }));
+            tasks.add(executor.submit(task));
         }
         executor.shutdown();
         if (!executor.awaitTermination(1, TimeUnit.MINUTES)) {
